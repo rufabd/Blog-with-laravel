@@ -10,7 +10,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware("auth:sanctum",['except'=>["index","show","store"]]);  
+        $this->middleware("auth:sanctum",['except'=>["index","show","store","update","destroy"]]);
     }
 
     /**
@@ -64,7 +64,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category=Category::find($id);
+        $category=Category::with('blogPosts')->find($id);
         if(Category::find($id) == null){
             return response()->json(["message"=>"The category doesn't exist!"], 404);
         } else {
@@ -92,7 +92,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category=Category::find($id);
+        $category=Category::with('blogPosts')->find($id);
         $category->update($request->all());
         return response()->json(["category"=>$category,"message"=>"The category has successfully been updated",], 200);
     }
@@ -103,8 +103,11 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->blogPosts()->delete();
+        $category->delete();
+        return response()->json([], 204);
     }
 }
