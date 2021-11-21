@@ -12,7 +12,7 @@ class AuthController extends Controller
     // inside of the constructor, the functions don't require login of the user
     public function __construct()
     {
-        $this->middleware("auth:sanctum", ['except'=>["register","login","show","index"]]);
+        $this->middleware("auth:sanctum", ['except'=>["register","login","show","index","destroy"]]);
     }
 
 
@@ -62,8 +62,8 @@ class AuthController extends Controller
 
     // Show specific user from users
     public function show($id) {
-        $user=User::find($id);
-        if(User::find($id) == null) {
+        $user=User::with('comments')->find($id);
+        if($user == null) {
             return response()->json(["message"=>"The user doesn't exist!"], 404);
         } else {
             return response()->json(["user"=>$user,], 200);
@@ -74,5 +74,14 @@ class AuthController extends Controller
     public function index() {   
         $users=User::with('comments')->get();
         return response()->json(["users"=>$users,], 200);
+    }
+
+
+    // Delete user and comments related to the user
+    public function destroy($id) {
+        $user = User::find($id);
+        $user->comments()->delete();
+        $user->delete();
+        return response()->json([], 204);
     }
 }

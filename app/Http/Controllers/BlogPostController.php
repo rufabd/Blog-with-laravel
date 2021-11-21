@@ -10,7 +10,8 @@ class BlogPostController extends Controller
 
     public function __construct()
     {
-        $this->middleware("auth:sanctum",['except'=>["index","search","store","update"]]);
+        $this->middleware("auth:sanctum",['except'=>["index","search","store",
+        "update","destroy","show"]]);
     }
 
     /**
@@ -73,7 +74,7 @@ class BlogPostController extends Controller
      */
     public function show($id)
     {
-        $blogPost=BlogPost::find($id);
+        $blogPost=BlogPost::with('category')->find($id);
         if($blogPost == null) {
             return response()->json(["message"=>"The Blog post doesn't exist!"],404);
         } else {
@@ -101,7 +102,7 @@ class BlogPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $blogPost=BlogPost::find($id);
+        $blogPost=BlogPost::with('category')->find($id);
         $blogPost->update($request->all());
         return response()->json(["blogPost"=>$blogPost,"message"=>"Post has been successfully updated"]);
     }
@@ -112,8 +113,14 @@ class BlogPostController extends Controller
      * @param  \App\Models\BlogPost  $blogPost
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BlogPost $blogPost)
+    public function destroy($id)
     {
-        //
+        BlogPost::find($id)->delete();
+        return response()->json(["message"=>"Post has been successfully deleted!"],204);
+    }
+
+    public function search($title)
+    {
+        return BlogPost::where('title', 'like', '%'.$title.'%')->get();
     }
 }

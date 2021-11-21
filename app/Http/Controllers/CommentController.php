@@ -60,9 +60,13 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show($id)
     {
-        //
+        $comment=Comment::with('user')->find($id);
+        if($comment == null){
+            return response()->json(["message"=>"The comment you would like to view doesn't exist"], 404);
+        }
+        return response()->json(["comment"=>$comment]);
     }
 
     /**
@@ -83,9 +87,12 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
-        //
+        $comment=Comment::with('user')->find($id);
+        $comment->update($request->all());
+        return response()->json(["comment"=>$comment,"message"=>"The comment has successfully been updated",
+        ]);
     }
 
     /**
@@ -94,8 +101,12 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy($id)
     {
-        //
+        if(Comment::find($id) == null) {
+            return response()->json(["Wrong method"=>"Delete is not supported for this route"], 405, []);
+        }
+        Comment::find($id)->delete();
+        return response()->json(["success"=>true], 204);
     }
 }
