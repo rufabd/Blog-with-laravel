@@ -21,7 +21,7 @@ class BlogPostController extends Controller
      */
     public function index()
     {
-        $blogPosts=BlogPost::with('category')->get();
+        $blogPosts=BlogPost::with(['category'])->get();
         return response()->json([$blogPosts], 200);
     }
 
@@ -74,7 +74,7 @@ class BlogPostController extends Controller
      */
     public function show($id)
     {
-        $blogPost=BlogPost::with('category')->find($id);
+        $blogPost=BlogPost::with(['category'])->find($id);
         if($blogPost == null) {
             return response()->json(["message"=>"The Blog post doesn't exist!"],404);
         } else {
@@ -102,7 +102,7 @@ class BlogPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $blogPost=BlogPost::with('category')->find($id);
+        $blogPost=BlogPost::with(['category'])->find($id);
         $blogPost->update($request->all());
         return response()->json(["blogPost"=>$blogPost,"message"=>"Post has been successfully updated"]);
     }
@@ -115,8 +115,12 @@ class BlogPostController extends Controller
      */
     public function destroy($id)
     {
-        BlogPost::find($id)->delete();
-        return response()->json(["message"=>"Post has been successfully deleted!"],204);
+        $blogPost = BlogPost::find($id);
+        $blogPost->comments()->delete();
+        $blogPost->delete();
+        return response()->json([], 204);
+        // BlogPost::find($id)->delete();
+        // return response()->json(["message"=>"Post has been successfully deleted!"],204);
     }
 
     public function search($title)

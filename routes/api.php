@@ -4,6 +4,9 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ProblemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,3 +54,21 @@ Route::put('/comment/{id}', [CommentController::class, 'update']); // update com
 Route::get('/comments', [CommentController::class, 'index']);    // view comments
 Route::get('/comment/{id}', [CommentController::class, 'show']);  // view specific comment
 Route::delete('/comment/{id}', [CommentController::class, 'destroy']); // delete comment
+
+
+Route::post('/report-problem', [ProblemController::class, 'store']);  // Report a problem
+Route::get('/reported-problems', [ProblemController::class, 'index']);    // View problems
+Route::get('/reported-problem/{id}', [ProblemController::class, 'show']);  // View specific problem
+Route::delete('/reported-problem/{id}', [ProblemController::class, 'destroy']); // Delete problem
+
+
+Route::post('/feedbacks', [FeedbackController::class, 'store']); // Create feedback
+Route::get('/feedbacks', [FeedbackController::class, 'index']);    // View feedbacks
+Route::get('/feedback/{id}',[FeedbackController::class, 'show']);  // View specific feedback
+Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']); // Delete feedback
+
+
+Route::post('/contact-me', [ContactController::class, 'store']); // create contact record
+Route::get('/contacts', [ContactController::class, 'index']);  // view all contact records
+Route::get('/contact/{id}', [ContactController::class, 'show']);  // View specific contact record
+Route::delete('/contact/{id}', [ContactController::class, 'destroy']); // delete contact record

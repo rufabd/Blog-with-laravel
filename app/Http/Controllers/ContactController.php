@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Problem;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
-class ProblemController extends Controller
+class ContactController extends Controller
 {
 
     public function __construct()
@@ -20,11 +20,8 @@ class ProblemController extends Controller
      */
     public function index()
     {
-        // $problems=Problem::with('user')->get();
-        // return response()->json([$problems], 200);
-
-        $problem=Problem::all();
-        return response()->json(["problem"=>$problem], 200);
+        $contact=Contact::all();
+        return response()->json(["contact"=>$contact], 200);
     }
 
     /**
@@ -48,48 +45,44 @@ class ProblemController extends Controller
         $request->validate([
             "name"=>"required",
             "email"=>"required",
-            "body"=>"required",
+            "subject"=>"required",
+            "message"=>"required"
         ]);
 
-        $problem=Problem::create([
+        $contact=Contact::create([
             "name"=>$request->name,
             "email"=>$request->email,
-            "body"=>$request->body,
+            "subject"=>$request->subject,
+            "message"=>$request->message,
             // "user_id"=>auth()->user()->id
         ]);
 
-        return response()->json(["problem"=>$problem], 200);
+        return response()->json(["contact"=>$contact], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Problem  $problem
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        // $problem=Problem::with('user')->find($id);
-        // if($problem == null){
-        //     return response()->json(["message"=>"The comment you would like to view doesn't exist"], 404);
-        // }
-        // return response()->json(["problem"=>$problem]);
-
-         $problem=Problem::find($id);
-        if(Problem::find($id) == null){
+        $contact=Contact::find($id);
+        if(Contact::find($id) == null){
             return response()->json(["message"=>"Unable to send! Try again"],404);
         } else {
-            return response()->json(["problem"=>$problem,]);
+            return response()->json(["contact"=>$contact,], 200);
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Problem  $problem
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function edit(Problem $problem)
+    public function edit(Contact $contact)
     {
         //
     }
@@ -98,10 +91,10 @@ class ProblemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Problem  $problem
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Problem $problem)
+    public function update(Request $request, Contact $contact)
     {
         //
     }
@@ -109,15 +102,15 @@ class ProblemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Problem  $problem
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if(Problem::find($id) == null) {
+        if(Contact::find($id) == null) {
             return response()->json(["Wrong method"=>"Delete is not supported for this route"], 405, []);
         }
-        Problem::find($id)->delete();
-        return response()->json(["success"=>true], 204);
+        Contact::find($id)->delete();
+        return response()->json([], 204);
     }
 }

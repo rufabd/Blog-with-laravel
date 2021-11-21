@@ -45,4 +45,12 @@ class User extends Authenticatable
     public function comments() {
         return $this->hasMany(Comment::class);
     }
+
+    // public function problems() {
+    //     return $this->hasMany(Problem::class);
+    // }
+
+    public function feedbacks() {
+        return $this->hasMany(Feedback::class);
+    }
 }
