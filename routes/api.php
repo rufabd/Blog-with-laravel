@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +35,6 @@ Route::post('/categories',[CategoryController::class,"store"]); // create catego
 
 Route::get('/blogPosts',[BlogPostController::class,'index']);
 Route::get('/categories',[CategoryController::class,'index']);    // view category
+
+Route::post('/comments', [CommentController::class, 'store']); // create comment
+Route::get('/comments', [CommentController::class, 'index']);    // view comments
