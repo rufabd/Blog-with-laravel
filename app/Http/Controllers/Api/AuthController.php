@@ -81,6 +81,7 @@ class AuthController extends Controller
     public function destroy($id) {
         $user = User::find($id);
         $user->comments()->delete();
+        // $user->problems()->delete();
         $user->delete();
         return response()->json([], 204);
     }

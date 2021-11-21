@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class FeedbackController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware("auth:sanctum",['except'=>["index","update"]]);
+        $this->middleware("auth:sanctum",['except'=>["index","update","show"]]);
     }
 
     /**
@@ -20,8 +19,8 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments=Comment::with(['user'])->get();
-        return response()->json([$comments], 200);
+        $feedbacks=Feedback::with('user')->get();
+        return response()->json([$feedbacks], 200);
     }
 
     /**
@@ -44,41 +43,38 @@ class CommentController extends Controller
     {
         $request->validate([
             "body"=>"required",
-            // "blogPost_id"=>"required",
         ]);
 
-        $comment=Comment::create([
+        $feedback=Feedback::create([
             "body"=>$request->body,
-            // "blogPost_id"=>$request->blogPost_id,
-            "user_id"=>auth()->user()->id,
-            
+            "user_id"=>auth()->user()->id
         ]);
 
-        return response()->json(["comment"=>$comment], 200);
+        return response()->json(["feedback"=>$feedback], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $comment=Comment::with(['user'])->find($id);
-        if($comment == null){
+        $feedback=Feedback::with('user')->find($id);
+        if($feedback == null){
             return response()->json(["message"=>"The comment you would like to view doesn't exist"], 404);
         }
-        return response()->json(["comment"=>$comment]);
+        return response()->json(["feedback"=>$feedback]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit(Feedback $feedback)
     {
         //
     }
@@ -87,29 +83,27 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Feedback $feedback)
     {
-        $comment=Comment::with(['user'])->find($id);
-        $comment->update($request->all());
-        return response()->json(["comment"=>$comment,"message"=>"The comment has successfully been updated",
-        ]);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        // if(Comment::find($id) == null) {
-        //     return response()->json(["Wrong method"=>"Delete is not supported for this route"], 405, []);
-        // }
-        Comment::find($id)->delete();
-        return response()->json(["success"=>true], 204);
+        $feedback = Feedback::find($id);
+        if($feedback == null) {
+            return response()->json(["Wrong method"=>"Delete is not supported for this route"], 405, []);
+        }
+        $feedback->delete();
+        return response()->json([], 204);
     }
 }
