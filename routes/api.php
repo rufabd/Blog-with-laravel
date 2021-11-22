@@ -94,6 +94,37 @@ Route::group(['middleware'=>['auth:sanctum','role:user']],function(){
 });
 
 
+// Error message for non-existing routes
+Route::get('/{any}',function(Request $request) {
+    return response()->json([
+        'message'=>"You can't use GET method for this route!"
+    ]);
+});
+
+Route::post('/{any}',function(Request $request) {
+    return response()->json([
+        'message'=>"You can't use POST method for this route!"
+    ],405);
+});
+
+Route::delete('/{any}',function(Request $request) {
+    return response()->json([
+        'message'=>"You can't use DELETE method for this route!"
+    ],405);
+});
+
+Route::put('/{any}',function(Request $request) {
+    return response()->json([
+        'message'=>"You can't use PUT method for this route!"
+    ],405);
+});
+
+Route::post('/{any}/{id}',function(Request $request) {
+    return response()->json([
+        'message'=>"You can't use POST method for this route!"
+    ], 405);
+});
+
 
 // Route::get('/user',[AuthController::class,"show"]);       // Show specific user
 
