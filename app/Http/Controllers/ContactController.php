@@ -20,7 +20,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contact=Contact::all();
+        $contact=Contact::all()->paginate(5);
         return response()->json(["contact"=>$contact], 200);
     }
 

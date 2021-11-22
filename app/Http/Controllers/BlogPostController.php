@@ -21,7 +21,7 @@ class BlogPostController extends Controller
      */
     public function index()
     {
-        $blogPosts=BlogPost::with(['category'])->get();
+        $blogPosts=BlogPost::with(['category'])->paginate(5);
         return response()->json([$blogPosts], 200);
     }
 

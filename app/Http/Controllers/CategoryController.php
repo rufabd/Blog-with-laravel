@@ -20,7 +20,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories=Category::with('blogPosts')->get();
+        $categories=Category::with('blogPosts')->paginate(5);
         // if($categories = null) {
         //     return response()->json(["message"=>"The category you are looking for doesn't exist"], 404);
         // }
