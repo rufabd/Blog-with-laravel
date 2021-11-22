@@ -12,25 +12,28 @@ class AuthController extends Controller
     // inside of the constructor, the functions don't require login of the user
     public function __construct()
     {
-        $this->middleware("auth:sanctum", ['except'=>["register","login","show","index","destroy"]]);
+        $this->middleware("auth:sanctum", ['except'=>["register","show","index","login"]]);
     }
 
 
     // Register user
     public function register(Request $request) {
         $request->validate([
-            "name"=>'required|string',
-            "email"=>'required|unique:users,email',
-            "password"=>'required|string|confirmed',
+            'name'=>'required|string',
+            'email'=>'required|unique:users,email',
+            'password'=>'required|string|confirmed',
+            'role'=>'required|string'
         ]);
 
         $user=User::create([
             "name"=>$request->name,
             "email"=>$request->email,
             "password"=>bcrypt($request->password),
+            "role"=>$request->role
         ]);
-
+        
         $token=$user->createToken("token-name")->plainTextToken;
+        $user->attachRole($request->role);
 
         return response()->json(["user"=>$user,"token"=>$token,], 200);
     }

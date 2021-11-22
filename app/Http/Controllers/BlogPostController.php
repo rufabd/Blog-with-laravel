@@ -10,7 +10,7 @@ class BlogPostController extends Controller
 
     public function __construct()
     {
-        $this->middleware("auth:sanctum",['except'=>["index","search","store",
+        $this->middleware("auth:sanctum",['except'=>["index","search",
         "update","destroy","show"]]);
     }
 
@@ -116,7 +116,7 @@ class BlogPostController extends Controller
     public function destroy($id)
     {
         $blogPost = BlogPost::find($id);
-        $blogPost->comments()->delete();
+        // $blogPost->comments()->delete();
         $blogPost->delete();
         return response()->json([], 204);
         // BlogPost::find($id)->delete();
