@@ -75,6 +75,7 @@ class AuthController extends Controller
 
     // Show full list of users
     public function index() {   
+        
         $users=User::with('comments')->paginate(5);
         return response()->json(["users"=>$users,], 200);
     }

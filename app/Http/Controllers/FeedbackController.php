@@ -19,6 +19,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
+        
         $feedbacks=Feedback::with('user')->paginate(5);
         return response()->json([$feedbacks], 200);
     }
