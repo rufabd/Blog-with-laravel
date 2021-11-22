@@ -23,7 +23,8 @@ class ProblemController extends Controller
         // $problems=Problem::with('user')->get();
         // return response()->json([$problems], 200);
 
-        $problem=Problem::all();
+        
+        $problem=Problem::paginate(5);
         return response()->json(["problem"=>$problem], 200);
     }
 

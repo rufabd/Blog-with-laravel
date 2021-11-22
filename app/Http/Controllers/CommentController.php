@@ -20,7 +20,8 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments=Comment::with(['user'])->get();
+        
+        $comments=Comment::with(['user'])->paginate(5);
         return response()->json([$comments], 200);
     }
 
