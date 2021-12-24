@@ -13,9 +13,9 @@ class BlogPost extends Model
         'body',
         'imageLink',
         'author',
-        'date',
-        'time',
-        'category_id'
+        // 'date',
+        // 'time',
+        // 'category_id'
     ];
 
     // public function comments() {

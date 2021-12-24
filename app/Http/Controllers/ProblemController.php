@@ -28,6 +28,10 @@ class ProblemController extends Controller
         return response()->json(["problem"=>$problem], 200);
     }
 
+    public function listProblems() {
+        $problem=Problem::all(['id','name','email','body']);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
