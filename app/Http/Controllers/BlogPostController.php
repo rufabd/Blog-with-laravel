@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlogPostController extends Controller
 {
@@ -24,6 +25,12 @@ class BlogPostController extends Controller
         
         $blogPosts=BlogPost::with(['category'])->paginate(5);
         return response()->json([$blogPosts], 200);
+    }
+
+    public function listBlogs()
+    {
+        $blogPosts = BlogPost::all(['id','title', 'body', 'imageLink', 'author', ]);
+        return response()->json($blogPosts);
     }
 
     /**
@@ -49,9 +56,9 @@ class BlogPostController extends Controller
             "body"=>"required",
             "imageLink"=>"required",
             "author"=>"required",
-            "date"=>"required",
-            "time"=>"required",
-            "category_id"=>"required"
+            // "date"=>"required",
+            // "time"=>"required",
+            // "category_id"=>"required"
         ]);
 
         $blogPost=BlogPost::create([
@@ -59,9 +66,9 @@ class BlogPostController extends Controller
             "body"=>$request->body,
             "imageLink"=>$request->imageLink,
             "author"=>$request->author,
-            "date"=>$request->date,
-            "time"=>$request->time,
-            "category_id"=>$request->category_id
+            // "date"=>$request->date,
+            // "time"=>$request->time,
+            // "category_id"=>$request->category_id
         ]);
 
         return response()->json(["blogPost"=>$blogPost], 200);

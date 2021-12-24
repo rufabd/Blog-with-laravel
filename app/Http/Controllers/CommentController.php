@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -93,10 +94,17 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user=auth()->user()->id;
         $comment=Comment::with(['user'])->find($id);
-        $comment->update($request->all());
-        return response()->json(["comment"=>$comment,"message"=>"The comment has successfully been updated",
+        $user_id = Comment::find($id)->user_id;
+        if($user == $user_id) {
+            $comment->update($request->all());
+            return response()->json(["comment"=>$comment,"message"=>"The comment has successfully been updated",
         ]);
+        } else {
+            return response()->json(['message'=>"You don't have right to do it"],403);
+        }
+        
     }
 
     /**

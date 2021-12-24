@@ -7,6 +7,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ProblemController;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,11 +27,13 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // General
-
+Route::middleware('auth:sanctum')->get("/user",function(Request $request){
+  return $request->user();
+});
 Route::post('/register',[AuthController::class,"register"]);  // User register
 Route::post('/login',[AuthController::class,"login"]);    // User login
-Route::post('/logout',[AuthController::class,"logout"]);  // User logout
-Route::resource("/user",AuthController::class);
+Route::post('/logout',[AuthController::class,"logout"])->middleware('auth:sanctum');  // User logout
+
 
 
 Route::get('/blogPost/{id}', [BlogPostController::class, 'show']);  // view specific blog
@@ -52,12 +55,14 @@ Route::post('/report-problem', [ProblemController::class, 'store']);  // Report 
 
 // Admin rights
 Route::group(['middleware'=>['auth:sanctum','role:admin']],function(){
-    Route::delete('/blogPost/{id}', [BlogPostController::class, 'destroy']); // delete blog
-    Route::delete('/category/{id}', [CategoryController::class, 'destroy']); // delete category
-
+    
+    
+    Route::get('/problems-list', [ProblemController::class,"listProblems"]);
     // Route::post('/logout',[AuthController::class,"logout"]);  // User logout
     Route::get('/users',[AuthController::class,"index"]);     // Show all users
+    Route::get('/users-list',[AuthController::class,"usersList"]);     // Show all users
     Route::get('/user/{id}',[AuthController::class,"show"]);       // Show specific user
+    Route::delete('/user/{id}',[AuthController::class,"destroy"]);       // Delete specific user
 
     Route::get('/comment/{id}', [CommentController::class, 'show']);  // view specific comment
     Route::delete('/comment/{id}', [CommentController::class, 'destroy']); // delete comment
@@ -76,14 +81,22 @@ Route::group(['middleware'=>['auth:sanctum','role:admin']],function(){
 
 // blogWriter rights
 Route::group(['middleware'=>['auth:sanctum','role:blogWriter']],function(){
-    Route::post('/blogPosts',[BlogPostController::class,"store"]);  // create blog post
-    Route::put('/blogPost/{id}', [BlogPostController::class, 'update']); // update blog post
-    Route::delete('/blogPost/{id}', [BlogPostController::class, 'destroy']); // delete blog post
+    // Route::post('/blogPosts',[BlogPostController::class,"store"]);  // create blog post
+    // Route::put('/blogPost/{id}', [BlogPostController::class, 'update']); // update blog post
+    // Route::delete('/blogPost/{id}', [BlogPostController::class, 'destroy']); // delete blog post
 
+    // Route::post('/categories',[CategoryController::class,"store"]); // create category
+    // Route::put('/category/{id}', [CategoryController::class, 'update']); // update category
+    // Route::delete('/category/{id}', [CategoryController::class, 'destroy']); // delete category
     Route::post('/categories',[CategoryController::class,"store"]); // create category
     Route::put('/category/{id}', [CategoryController::class, 'update']); // update category
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']); // delete category
+    Route::get('/categories-list', [CategoryController::class, "listCateogry"]); // list of cats
 
+    Route::post('/blogPosts',[BlogPostController::class,"store"]);  // create blog post
+    Route::put('/blogPost/{id}', [BlogPostController::class, 'update']); // update blog post
+    Route::delete('/blogPost/{id}', [BlogPostController::class, 'destroy']); // delete blog post
+    Route::get('/blogs-list', [BlogPostController::class, "listBlogs"]); // list of posts
 });
 
 // User rights

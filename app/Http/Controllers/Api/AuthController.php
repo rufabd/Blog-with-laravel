@@ -29,22 +29,17 @@ class AuthController extends Controller
             "name"=>$request->name,
             "email"=>$request->email,
             "password"=>bcrypt($request->password),
-            "role"=>$request->role
+             "role"=>$request->role
         ]);
         
         $token=$user->createToken("token-name")->plainTextToken;
-        $user->attachRole($request->role);
+       $user->attachRole($request->role);
 
         return response()->json(["user"=>$user,"token"=>$token,], 200);
     }
 
 
-    // Logout of the user
-    public function logout(Request $request) {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(["message"=>"Logged out!"], 200);
-    }
-
+    
 
     // login of the user
     public function login(Request $request) {
@@ -80,6 +75,12 @@ class AuthController extends Controller
         return response()->json(["users"=>$users,], 200);
     }
 
+    public function usersList() {   
+        
+        $users=User::all(['id','name','email','role']);
+        return response()->json(["users"=>$users,], 200);
+    }
+
 
     // Delete user and comments related to the user
     public function destroy($id) {
@@ -88,5 +89,14 @@ class AuthController extends Controller
         // $user->problems()->delete();
         $user->delete();
         return response()->json([], 204);
+    }
+
+    // Logout of the user
+    public function logout(Request $request) {
+          ///auth()->user()->tokens()->delete();
+          $request->user()->tokens()->delete();
+          return response()->json(['msg'=>'Logged out']);
+
+        
     }
 }

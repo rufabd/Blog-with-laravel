@@ -19,9 +19,9 @@ class CreateBlogPostsTable extends Migration
             $table->longText('body');
             $table->longText('imageLink');
             $table->string('author');
-            $table->date('date');
-            $table->time('time');
-            $table->string('category_id');
+            // $table->date('date');
+            // $table->time('time');
+            $table->integer('category_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
