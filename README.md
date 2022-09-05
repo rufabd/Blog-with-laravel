@@ -65,15 +65,15 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## Some Mockups of Simple Personal Blog Website
+# Some Mockups of Simple Personal Blog Website
 
-# Short Summary
+## Short Summary
 
 This is a Single Page Application (SPA) developed with Laravel, Vue.js, HTML & CSS, and MySQL as the database.
 
 The website is developed for the purpose of persoanal Blogging, so the roles for the user types contain admin, blogWriter, editor and user with different permissions for each.
 
-# Mockuops of the project
+## Mockuops of the project
 
 Admin Categories List (Editable)
 
